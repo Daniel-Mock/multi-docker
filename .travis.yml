@@ -1,0 +1,24 @@
+sudo: required
+services:
+    - docker
+
+before_install:
+    - docker build -t djmock/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+    - docker run djmock/react-test npm test -- --coverage
+
+after_success:
+    - docker build -t djmock/multi-client ./client
+    - docker build -t djmock/multi-nginx ./nginx
+    - docker build -t djmock/multi-server ./server
+    - docker build -t djmock/multi-worker ./worker
+    
+    #login to docker CLI
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
+    #take these images and push them to docker hub
+    - docker push djmock/multi-client
+    - docker push djmock/multi-nginx
+    - docker push djmock/multi-server
+    - docker push djmock/multi-worker
