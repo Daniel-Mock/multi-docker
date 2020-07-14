@@ -5,7 +5,7 @@ services:
         environment:
             - POSTGRES_PASSWORD=postgres_password
     redis:
-        image: 'alpine'
+        image: 'redis:latest'
     nginx:
         depends_on:
             - api
