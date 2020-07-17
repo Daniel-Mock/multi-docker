@@ -13,7 +13,7 @@ after_success:
     - docker build -t djmock/multi-nginx ./nginx
     - docker build -t djmock/multi-server ./server
     - docker build -t djmock/multi-worker ./worker
-    
+
     #login to docker CLI
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
 
@@ -22,3 +22,15 @@ after_success:
     - docker push djmock/multi-nginx
     - docker push djmock/multi-server
     - docker push djmock/multi-worker
+
+deploy:
+    provider: elasticbeanstalk
+    region: us-east-2
+    app: multi-docker
+    env: MultiDocker-env
+    bucket_name: elasticbeanstalk-us-east-2-658165505605
+    bucket_path: docker-multi
+    on:
+        branch: master
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY

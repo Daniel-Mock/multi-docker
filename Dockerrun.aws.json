@@ -1,0 +1,35 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "containerDefinitions": [
+        {
+            "name": "client",
+            "image": "djmock/multi-client",
+            "hostname": "client",
+            "essential": false
+                },
+        {
+            "name": "server",
+            "image": "djmock/multi-server",
+            "hostname": "api",
+            "essential": false
+                },
+        {
+            "name": "worker",
+            "image": "djmock/multi-worker",
+            "hostname": "worker",
+            "essential": false
+                },
+        {
+            "name": "nginx",
+            "image": "djmock/multi-nginx",
+            "essential": true,
+            "portMappings": [
+                {
+                    "hostPort": 80,
+                    "containerPort": 80
+                        }
+            ],
+            "links": ["client", "server"]
+                }
+    ]
+        }
